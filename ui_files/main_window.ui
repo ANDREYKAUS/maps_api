@@ -43,11 +43,17 @@
       <x>10</x>
       <y>50</y>
       <width>781</width>
-      <height>481</height>
+      <height>475</height>
      </rect>
+    </property>
+    <property name="acceptDrops">
+     <bool>false</bool>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>
