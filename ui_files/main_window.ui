@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Карты</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLineEdit" name="search_input">
@@ -34,7 +34,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Искать!</string>
     </property>
    </widget>
    <widget class="QLabel" name="image_label">
