@@ -13,11 +13,13 @@ class MainWindow(QMainWindow):
         uic.loadUi("ui_files/main_window.ui", self)
 
         self.current_spn = INITIAL_SPN
+        self.current_coords = None
 
         self.show_location(INITIAL_LOCATION)
 
     def show_location(self, location_name):
         location_coordinates = get_coordinates_by_address(location_name)
+        self.current_coords = location_coordinates
         location_ll = ",".join(map(str, location_coordinates))
         spn = ",".join(map(str, self.current_spn))
         print(location_ll, spn)
