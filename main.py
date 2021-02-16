@@ -17,12 +17,13 @@ class MainWindow(QMainWindow):
 
         self.show_location(INITIAL_LOCATION)
 
-    def show_location(self, location_name):
-        location_coordinates = get_coordinates_by_address(location_name)
-        self.current_coords = location_coordinates
-        location_ll = ",".join(map(str, location_coordinates))
+    def show_location(self, location_name=None):
+        if location_name is not None:
+            location_coordinates = get_coordinates_by_address(location_name)
+            self.current_coords = location_coordinates
+            
+        location_ll = ",".join(map(str, self.current_coords))
         spn = ",".join(map(str, self.current_spn))
-        print(location_ll, spn)
         image = get_static_map_image(location_ll, spn=spn)
 
         image = QPixmap.fromImage(ImageQt(image))
