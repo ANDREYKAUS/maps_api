@@ -14,34 +14,11 @@
    <string>Карты</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLineEdit" name="search_input">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>621</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="search_button">
-    <property name="geometry">
-     <rect>
-      <x>640</x>
-      <y>10</y>
-      <width>151</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Искать!</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="image_label">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>50</y>
+      <x>0</x>
+      <y>60</y>
       <width>781</width>
       <height>475</height>
      </rect>
@@ -56,6 +33,35 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>781</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLineEdit" name="search_input"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="search_button">
+       <property name="text">
+        <string>Искать!</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="clean_button">
+       <property name="text">
+        <string>Сброс поискового результат</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -63,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
