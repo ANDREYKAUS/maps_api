@@ -44,23 +44,23 @@ class MainWindow(QMainWindow):
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
-            self.current_spn = [self.current_spn[0] + 0.001, self.current_spn[1] + 0.001]
+            self.current_spn = [self.current_spn[0] + 0.005, self.current_spn[1] + 0.005]
         elif event.key() == Qt.Key_PageDown:
-            self.current_spn = [self.current_spn[0] - 0.001, self.current_spn[1] - 0.001]
+            self.current_spn = [self.current_spn[0] - 0.005, self.current_spn[1] - 0.005]
         elif event.key() == Qt.Key_Up:
             self.current_coords[1] += 0.001
-            self.show_location()
         elif event.key() == Qt.Key_Down:
             self.current_coords[1] -= 0.001
-            self.show_location()
         elif event.key() == Qt.Key_Left:
             self.current_coords[0] -= 0.001
-            self.show_location()
         elif event.key() == Qt.Key_Right:
             self.current_coords[0] += 0.001
-            self.show_location()
         elif event.key() == Qt.Key_Escape:
             self.close()
+
+        if event.key() in [Qt.Key_PageUp, Qt.Key_PageDown, Qt.Key_Up, Qt.Key_Down,
+                           Qt.Key_Left, Qt.Key_Right]:
+            self.show_location()
 
 
 if __name__ == "__main__":
