@@ -18,7 +18,11 @@ class MainWindow(QMainWindow):
         self.current_coords = [0, 0]
 
         self.show_location(initial_location)
+        self.init_ui()
         self.setFocus()
+
+    def init_ui(self):
+        self.search_button.clicked.connect(self.handle_search)
 
     def show_location(self, location_name=None):
         if location_name is not None:
@@ -32,6 +36,11 @@ class MainWindow(QMainWindow):
         image = QPixmap.fromImage(ImageQt(image))
 
         self.image_label.setPixmap(image)
+
+    def handle_search(self):
+        search_location = self.search_input.text()
+        
+        self.show_location(search_location)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Up:
@@ -48,6 +57,7 @@ class MainWindow(QMainWindow):
             self.show_location()
         elif event.key() == Qt.Key_Escape:
             self.close()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
