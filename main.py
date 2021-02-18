@@ -34,7 +34,11 @@ class MainWindow(QMainWindow):
         self.image_label.setPixmap(image)
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Up:
+        if event.key() == Qt.Key_PageUp:
+            self.current_spn = [self.current_spn[0] + 0.001, self.current_spn[1] + 0.001]
+        elif event.key() == Qt.Key_PageDown:
+            self.current_spn = [self.current_spn[0] - 0.001, self.current_spn[1] - 0.001]
+        elif event.key() == Qt.Key_Up:
             self.current_coords[1] += 0.001
             self.show_location()
         elif event.key() == Qt.Key_Down:
