@@ -2,6 +2,10 @@ from io import BytesIO
 import requests
 from PIL import Image
 
+GEOCODE_API_KEY = "40d1649f-0493-4b70-98ba-98533de7710b"
+GEOCODE_SERVER = "https://geocode-maps.yandex.ru/1.x/"
+STATIC_MAP_SERVER = "https://static-maps.yandex.ru/1.x/"
+
 
 def get_object_by_address(address: str):
     request_params = {
@@ -33,8 +37,8 @@ def get_coordinates_by_address(address: str):
     return (float(toponym_longitude), float(toponym_lattitude))
 
 
-def get_static_map_image(ll, points=tuple(), spn=None,
-        placemark="ya_en", mode="map"):
+def get_static_map_image(ll, mode, points=tuple(), 
+        spn=None, placemark="ya_en"):
     request_params = {
         'll': ll,
         'l': mode,
@@ -54,4 +58,4 @@ def get_static_map_image(ll, points=tuple(), spn=None,
                              f"{response.status_code} {response.reason}\n"
                              f"{response.content}")
 
-    return Image.open(BytesIO(response.content))
+    return bytes(response.content)
