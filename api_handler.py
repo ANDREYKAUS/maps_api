@@ -1,7 +1,6 @@
 from io import BytesIO
 import requests
 from PIL import Image
-from config import *
 
 
 def get_object_by_address(address: str):
