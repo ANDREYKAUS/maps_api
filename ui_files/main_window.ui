@@ -197,6 +197,35 @@
        <string>Применить</string>
       </property>
      </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>90</y>
+        <width>271</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Open Sans</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Почтовый индекс</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="index_combobox">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>120</y>
+        <width>251</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
