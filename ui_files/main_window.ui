@@ -166,7 +166,7 @@
        <string>Начальный адрес</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="initial_address_input">
+     <widget class="QLineEdit" name="address_input">
       <property name="geometry">
        <rect>
         <x>20</x>

@@ -6,6 +6,7 @@ from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt
 from api_handler import *
 
+# self.initial_location = 'Красноярск, Дубровинского 1И'
 MAP_STYLES = {
     'Схема': "map",
     'Спутник': "sat",
@@ -18,7 +19,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         uic.loadUi("ui_files/main_window.ui", self)
 
-        self.initial_location = "Красноярск, Дубровинского 1И"
+        self.initial_location = 'Красноярск, Дубровинского 1И'
 
         self.current_spn = [0.005, 0.005]
         self.current_coords = [0, 0]
@@ -33,7 +34,8 @@ class MainWindow(QMainWindow):
         self.search_button.clicked.connect(self.handle_search)
         self.style_combobox.addItems(list(MAP_STYLES.keys()))
         self.style_combobox.activated[str].connect(self.handle_style_change)
-        self.reset_button.clicked.connect(self.handle_reset)
+        self.reset_button.clicked.connect(self.reset_mode)
+        self.end_button.clicked.connect(self.new_main_address)
 
     def show_location(self, location=None):
         if location is not None:
@@ -54,8 +56,11 @@ class MainWindow(QMainWindow):
 
         self.image_label.setPixmap(image)
 
-    def handle_reset(self):
-        self.placemark_coords = None
+    def reset_mode(self):
+        self.show_location((self.initial_location, False))
+
+    def new_main_address(self):
+        self.initial_location = self.address_input.text()
         self.show_location((self.initial_location, False))
 
     def handle_search(self):
