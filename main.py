@@ -18,7 +18,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         uic.loadUi("ui_files/main_window.ui", self)
 
-        initial_location = "Красноярск, Дубровинского 1И"
+        self.initial_location = "Красноярск, Дубровинского 1И"
 
         self.current_spn = [0.005, 0.005]
         self.current_coords = [0, 0]
@@ -26,14 +26,14 @@ class MainWindow(QMainWindow):
         self.placemark_coords = None
 
         self.init_ui()
-        self.show_location((initial_location, False))
+        self.show_location((self.initial_location, False))
         self.setFocus()
 
     def init_ui(self):
         self.search_button.clicked.connect(self.handle_search)
         self.style_combobox.addItems(list(MAP_STYLES.keys()))
         self.style_combobox.activated[str].connect(self.handle_style_change)
-        self.reset_button.clicked.connect(self.reset_mode)
+        self.reset_button.clicked.connect(self.handle_reset)
 
     def show_location(self, location=None):
         if location is not None:
@@ -45,7 +45,6 @@ class MainWindow(QMainWindow):
         
         location_ll = ",".join(map(str, self.current_coords))
         placemark_ll = ",".join(map(str, self.placemark_coords)) if self.placemark_coords else None
-        print(placemark_ll)
         spn = ",".join(map(str, self.current_spn))
         image = get_static_map_image(location_ll, mode=self.current_style, spn=spn,
                                      points=[(placemark_ll, "pm2rdm")] if placemark_ll else None)
@@ -55,8 +54,9 @@ class MainWindow(QMainWindow):
 
         self.image_label.setPixmap(image)
 
-    def reset_mode(self):
-        self.show_location('Красноярск, Дубровинского 1И"')
+    def handle_reset(self):
+        self.placemark_coords = None
+        self.show_location((self.initial_location, False))
 
     def handle_search(self):
         search_location = self.search_input.text()
