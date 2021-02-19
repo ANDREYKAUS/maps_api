@@ -6,6 +6,12 @@ from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt
 from api_handler import *
 
+MAP_STYLES = {
+    'Схема': "map",
+    'Спутник': "sat",
+    'Гибрид': "sat, skl"
+}
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -16,11 +22,15 @@ class MainWindow(QMainWindow):
 
         self.current_spn = [0.005, 0.005]
         self.current_coords = [0, 0]
-        self.current_style = 'map'
+        self.current_style = "map"
 
-        self.change_l()
+        self.init_ui()
         self.show_location(initial_location)
         self.setFocus()
+
+    def init_ui(self):
+        self.style_combobox.addItems(list(MAP_STYLES.keys()))
+        self.style_combobox.activated[str].connect(self.handle_style_change)
 
     def show_location(self, location_name=None):
         if location_name is not None:
@@ -52,13 +62,8 @@ class MainWindow(QMainWindow):
         elif event.key() == Qt.Key_Escape:
             self.close()
 
-    def change_l(self):
-        combo = self.SNPbox
-        combo.addItems(["map", "sat", "sat,skl"])
-        combo.activated[str].connect(self.onActivated)
-
-    def onActivated(self, text):
-        self.current_style = text
+    def handle_style_change(self, text):
+        self.current_style = MAP_STYLES[text]
         self.show_location()
 
 
