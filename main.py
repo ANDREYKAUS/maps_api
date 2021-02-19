@@ -32,6 +32,7 @@ class MainWindow(QMainWindow):
         self.search_button.clicked.connect(self.handle_search)
         self.style_combobox.addItems(list(MAP_STYLES.keys()))
         self.style_combobox.activated[str].connect(self.handle_style_change)
+        self.reset_button.clicked.connect(self.reset_mode)
 
     def show_location(self, location_name=None):
         if location_name is not None:
@@ -46,6 +47,9 @@ class MainWindow(QMainWindow):
         image = QPixmap.fromImage(image)
 
         self.image_label.setPixmap(image)
+
+    def reset_mode(self):
+        self.show_location('Красноярск, Дубровинского 1И"')
 
     def handle_search(self):
         search_location = self.search_input.text()
