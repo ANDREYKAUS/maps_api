@@ -7,6 +7,13 @@ GEOCODE_SERVER = "https://geocode-maps.yandex.ru/1.x/"
 STATIC_MAP_SERVER = "https://static-maps.yandex.ru/1.x/"
 
 
+def get_coordinates_from_object(toponym):
+    toponym_coordinates = toponym['Point']['pos']
+    toponym_longitude, toponym_lattitude = toponym_coordinates.split()
+
+    return (float(toponym_longitude), float(toponym_lattitude))
+
+
 def get_object_by_address(address: str):
     request_params = {
         'apikey': GEOCODE_API_KEY,

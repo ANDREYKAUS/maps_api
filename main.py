@@ -38,7 +38,10 @@ class MainWindow(QMainWindow):
     def show_location(self, location=None):
         if location is not None:
             location_name, is_placemark = location
-            location_coordinates = list(get_coordinates_by_address(location_name))
+            toponym = get_object_by_address(location_name)
+            location_coordinates = list(get_coordinates_from_object(toponym))
+            address = toponym['metaDataProperty']['GeocoderMetaData']['text']
+            self.address_label.setText(address)
             self.current_coords = location_coordinates
             if is_placemark:
                 self.placemark_coords = location_coordinates.copy()
@@ -57,6 +60,7 @@ class MainWindow(QMainWindow):
     def handle_reset(self):
         self.placemark_coords = None
         self.show_location((self.initial_location, False))
+        self.address_label.setText("")
 
     def handle_search(self):
         search_location = self.search_input.text()
