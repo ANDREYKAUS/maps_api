@@ -2,9 +2,15 @@ import sys
 from PIL.ImageQt import ImageQt
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5 import uic
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt
 from api_handler import *
+
+MAP_STYLES = {
+    'Схема': "map",
+    'Спутник': "sat",
+    'Гибрид': "sat, skl"
+}
 
 
 class MainWindow(QMainWindow):
@@ -16,13 +22,16 @@ class MainWindow(QMainWindow):
 
         self.current_spn = [0.005, 0.005]
         self.current_coords = [0, 0]
+        self.current_style = "map"
 
-        self.show_location(initial_location)
         self.init_ui()
+        self.show_location(initial_location)
         self.setFocus()
 
     def init_ui(self):
         self.search_button.clicked.connect(self.handle_search)
+        self.style_combobox.addItems(list(MAP_STYLES.keys()))
+        self.style_combobox.activated[str].connect(self.handle_style_change)
 
     def show_location(self, location_name=None):
         if location_name is not None:
@@ -31,9 +40,10 @@ class MainWindow(QMainWindow):
             
         location_ll = ",".join(map(str, self.current_coords))
         spn = ",".join(map(str, self.current_spn))
-        image = get_static_map_image(location_ll, spn=spn)
+        image = get_static_map_image(location_ll, mode=self.current_style, spn=spn)
 
-        image = QPixmap.fromImage(ImageQt(image))
+        image = QImage.fromData(image)
+        image = QPixmap.fromImage(image)
 
         self.image_label.setPixmap(image)
 
@@ -61,6 +71,10 @@ class MainWindow(QMainWindow):
         if event.key() in [Qt.Key_PageUp, Qt.Key_PageDown, Qt.Key_Up, Qt.Key_Down,
                            Qt.Key_Left, Qt.Key_Right]:
             self.show_location()
+
+    def handle_style_change(self, text):
+        self.current_style = MAP_STYLES[text]
+        self.show_location()
 
 
 if __name__ == "__main__":

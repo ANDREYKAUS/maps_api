@@ -37,8 +37,8 @@ def get_coordinates_by_address(address: str):
     return (float(toponym_longitude), float(toponym_lattitude))
 
 
-def get_static_map_image(ll, points=tuple(), spn=None,
-        placemark="ya_en", mode="map"):
+def get_static_map_image(ll, mode, points=tuple(), 
+        spn=None, placemark="ya_en"):
     request_params = {
         'll': ll,
         'l': mode,
@@ -58,4 +58,4 @@ def get_static_map_image(ll, points=tuple(), spn=None,
                              f"{response.status_code} {response.reason}\n"
                              f"{response.content}")
 
-    return Image.open(BytesIO(response.content))
+    return bytes(response.content)

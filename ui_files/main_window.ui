@@ -89,7 +89,7 @@
      <attribute name="title">
       <string>Settings</string>
      </attribute>
-     <widget class="QComboBox" name="SNPbox">
+     <widget class="QComboBox" name="style_combobox">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -137,7 +137,7 @@
        <string>Начальное приближение карты</string>
       </property>
      </widget>
-     <widget class="QDoubleSpinBox" name="doubleSpinBox">
+     <widget class="QDoubleSpinBox" name="initial_spn_spinbox">
       <property name="geometry">
        <rect>
         <x>440</x>
@@ -166,7 +166,7 @@
        <string>Начальный адрес</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="initial_address_input">
       <property name="geometry">
        <rect>
         <x>20</x>
