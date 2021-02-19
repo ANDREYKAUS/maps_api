@@ -23,9 +23,10 @@ class MainWindow(QMainWindow):
         self.current_spn = [0.005, 0.005]
         self.current_coords = [0, 0]
         self.current_style = "map"
+        self.placemark_coords = None
 
         self.init_ui()
-        self.show_location(initial_location)
+        self.show_location((initial_location, False))
         self.setFocus()
 
     def init_ui(self):
@@ -33,14 +34,20 @@ class MainWindow(QMainWindow):
         self.style_combobox.addItems(list(MAP_STYLES.keys()))
         self.style_combobox.activated[str].connect(self.handle_style_change)
 
-    def show_location(self, location_name=None):
-        if location_name is not None:
+    def show_location(self, location=None):
+        if location is not None:
+            location_name, is_placemark = location
             location_coordinates = list(get_coordinates_by_address(location_name))
             self.current_coords = location_coordinates
-            
+            if is_placemark:
+                self.placemark_coords = location_coordinates.copy()
+        
         location_ll = ",".join(map(str, self.current_coords))
+        placemark_ll = ",".join(map(str, self.placemark_coords)) if self.placemark_coords else None
+        print(placemark_ll)
         spn = ",".join(map(str, self.current_spn))
-        image = get_static_map_image(location_ll, mode=self.current_style, spn=spn)
+        image = get_static_map_image(location_ll, mode=self.current_style, spn=spn,
+                                     points=[(placemark_ll, "pm2rdm")] if placemark_ll else None)
 
         image = QImage.fromData(image)
         image = QPixmap.fromImage(image)
@@ -50,7 +57,7 @@ class MainWindow(QMainWindow):
     def handle_search(self):
         search_location = self.search_input.text()
         
-        self.show_location(search_location)
+        self.show_location((search_location, True))
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
