@@ -13,7 +13,16 @@
   <property name="windowTitle">
    <string>Карты</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
@@ -24,7 +33,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -82,6 +91,19 @@
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QProgressBar" name="status">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>520</y>
+        <width>791</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="value">
+       <number>24</number>
       </property>
      </widget>
     </widget>
@@ -166,7 +188,7 @@
        <string>Начальный адрес</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="initial_address_input">
+     <widget class="QLineEdit" name="address_input">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -192,6 +214,9 @@
         <weight>50</weight>
         <bold>false</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
       <property name="text">
        <string>Применить</string>
