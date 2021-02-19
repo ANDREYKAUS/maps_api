@@ -20,11 +20,11 @@
       <x>0</x>
       <y>0</y>
       <width>811</width>
-      <height>591</height>
+      <height>571</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -71,7 +71,7 @@
         <x>10</x>
         <y>50</y>
         <width>781</width>
-        <height>475</height>
+        <height>421</height>
        </rect>
       </property>
       <property name="acceptDrops">
@@ -82,6 +82,22 @@
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="address_label">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>470</y>
+        <width>781</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
       </property>
      </widget>
     </widget>
