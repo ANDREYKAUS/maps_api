@@ -116,9 +116,16 @@ class MainWindow(QMainWindow):
             placemark_ll = ",".join([str(element) for element in self.placemark_coords])
 
             toponym = get_object_by_address(placemark_ll)
-            print(toponym)
+
             address = toponym['metaDataProperty']['GeocoderMetaData']['text']
-            self.address_label.setText(address)
+
+            closest_org = find_closest_organization(address, placemark_ll)
+
+            if closest_org:
+                org_name = closest_org['properties']['CompanyMetaData']['name']
+                self.address_label.setText(f"{address} (Ближайшая организация: {org_name})")
+            else:
+                self.address_label.setText(address)
 
             self.show_location()
 

@@ -6,6 +6,8 @@ from PIL import Image
 GEOCODE_API_KEY = "40d1649f-0493-4b70-98ba-98533de7710b"
 GEOCODE_SERVER = "https://geocode-maps.yandex.ru/1.x/"
 STATIC_MAP_SERVER = "https://static-maps.yandex.ru/1.x/"
+SEARCH_SERVER = "https://search-maps.yandex.ru/v1/"
+SEARCH_API_KEY = "dda3ddba-c9ea-4ead-9010-f43fbc15c6e3"
 COORD_TO_GEO_X = 0.0000426
 COORD_TO_GEO_Y = 0.0000428
 
@@ -64,7 +66,7 @@ def get_static_map_image(ll, mode, points=None,
     response = requests.get(STATIC_MAP_SERVER, params=request_params)
 
     if not response:
-        raise AssertionError(f"Ошибка при получении статического изображения:\n"
+        raise RuntimeError(f"Ошибка при получении статического изображения:\n"
                              f"{response.url}\n"
                              f"{response.status_code} {response.reason}\n"
                              f"{response.content}")
@@ -79,3 +81,24 @@ def screen_to_geo(map_long, map_lat, mouse_long, mouse_lat, zoom):
     ly = map_lat + dy * COORD_TO_GEO_Y * \
             math.cos(math.radians(map_lat)) * math.pow(2, 15 - zoom)
     return lx, ly
+
+
+def find_closest_organization(address, ll):
+    request_params = {
+        "apikey": SEARCH_API_KEY,
+        "type": "biz",
+        "lang": "ru_RU",
+        "text": address,
+        "results": 1,
+        "ll": ll,
+        "spn": "0.000045,0.000045"
+    }
+
+    response = requests.get(SEARCH_SERVER, params=request_params)
+    if not response:
+        raise RuntimeError(f"Ошибка при получении статического изображения:\n"
+                             f"{response.url}\n"
+                             f"{response.status_code} {response.reason}\n"
+                             f"{response.content}")
+    data = response.json()
+    return data['features'][0] if data['features'] else None
