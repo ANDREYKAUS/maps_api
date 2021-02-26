@@ -35,7 +35,7 @@ class MainWindow(QMainWindow):
         self.search_button.clicked.connect(self.handle_search)
         self.style_combobox.addItems(list(MAP_STYLES.keys()))
         self.style_combobox.activated[str].connect(self.handle_style_change)
-        self.reset_button.clicked.connect(self.reset_mode)
+        self.reset_button.clicked.connect(self.handle_reset)
         self.end_button.clicked.connect(self.new_main_address)
         self.index_checkbox.stateChanged.connect(self.handle_checkbox)
 
@@ -43,6 +43,10 @@ class MainWindow(QMainWindow):
         if location is not None:
             location_name, is_placemark = location
             toponym = get_object_by_address(location_name)
+            if not toponym:
+                self.statusbar.showMessage("Нет такого объекта")
+                self.statusbar.setStyleSheet("background-color: red")
+                return
             location_coordinates = list(get_coordinates_from_object(toponym))
             address = toponym['metaDataProperty']['GeocoderMetaData']['text']
             self.address_label.setText(address)
@@ -61,12 +65,16 @@ class MainWindow(QMainWindow):
 
         self.image_label.setPixmap(image)
 
+        self.statusbar.showMessage("")
+        self.statusbar.setStyleSheet("")
+
     def status_bar(self):
         for i in range(101):
             time.sleep(0.001)
             self.status.setValue(i)
 
-    def reset_mode(self):
+    def handle_reset(self):
+        self.placemark_coords = None
         self.show_location((self.initial_location, False))
 
     def new_main_address(self):
@@ -76,11 +84,17 @@ class MainWindow(QMainWindow):
 
     def handle_search(self):
         search_location = self.search_input.text()
-        
+
+        if not search_location.strip():
+            self.statusbar.showMessage("Нет критерия поиска!")
+            self.statusbar.setStyleSheet("background-color: red")
+            return
+
         self.show_location((search_location, True))
 
     def handle_checkbox(self, state):
         self.is_showing_index = bool(state)
+        self.show_location()
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:

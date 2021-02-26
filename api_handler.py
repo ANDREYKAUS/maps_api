@@ -91,7 +91,8 @@ def find_closest_organization(address, ll):
         "text": address,
         "results": 1,
         "ll": ll,
-        "spn": "0.000045,0.000045"
+        "spn": "0.05,0.05",
+        "rspn": 1
     }
 
     response = requests.get(SEARCH_SERVER, params=request_params)
