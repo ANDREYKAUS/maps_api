@@ -1,3 +1,4 @@
+import math
 from io import BytesIO
 import requests
 from PIL import Image
@@ -9,7 +10,6 @@ SEARCH_SERVER = "https://search-maps.yandex.ru/v1/"
 SEARCH_API_KEY = "dda3ddba-c9ea-4ead-9010-f43fbc15c6e3"
 COORD_TO_GEO_X = 0.0000426
 COORD_TO_GEO_Y = 0.0000428
-
 
 
 def get_coordinates_from_object(toponym):
@@ -50,17 +50,18 @@ def get_coordinates_by_address(address: str):
 
 
 def get_static_map_image(ll, mode, points=None, 
-        spn=None, placemark="ya_en"):
+        zoom=None, placemark="ya_en"):
     request_params = {
         'll': ll,
         'l': mode,
+        'size': "650,450"
     }
     
     if points:
         request_params['pt'] = "~".join([",".join(point) for point in points])
 
-    if spn:
-        request_params['spn'] = spn
+    if zoom:
+        request_params['z'] = zoom
 
     response = requests.get(STATIC_MAP_SERVER, params=request_params)
 

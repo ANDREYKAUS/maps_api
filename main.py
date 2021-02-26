@@ -7,11 +7,10 @@ from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt
 from api_handler import *
 
-# self.initial_location = 'Красноярск, Дубровинского 1И'
 MAP_STYLES = {
     'Схема': "map",
     'Спутник': "sat",
-    'Гибрид': "sat, skl"
+    'Гибрид': "sat,skl"
 }
 
 
@@ -22,7 +21,7 @@ class MainWindow(QMainWindow):
 
         self.initial_location = 'Красноярск, Дубровинского 1И'
 
-        self.current_spn = [0.005, 0.005]
+        self.current_zoom = 17
         self.current_coords = [0, 0]
         self.current_style = "map"
         self.placemark_coords = None
@@ -51,8 +50,7 @@ class MainWindow(QMainWindow):
         
         location_ll = ",".join(map(str, self.current_coords))
         placemark_ll = ",".join(map(str, self.placemark_coords)) if self.placemark_coords else None
-        spn = ",".join(map(str, self.current_spn))
-        image = get_static_map_image(location_ll, mode=self.current_style, spn=spn,
+        image = get_static_map_image(location_ll, mode=self.current_style, zoom=self.current_zoom,
                                      points=[(placemark_ll, "pm2rdm")] if placemark_ll else None)
 
         self.status_bar()
@@ -62,8 +60,8 @@ class MainWindow(QMainWindow):
         self.image_label.setPixmap(image)
 
     def status_bar(self):
-        for i in range(101): 
-            time.sleep(0.001) 
+        for i in range(101):
+            time.sleep(0.001)
             self.status.setValue(i)
 
     def reset_mode(self):
@@ -81,9 +79,11 @@ class MainWindow(QMainWindow):
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
-            self.current_spn = [self.current_spn[0] + 0.005, self.current_spn[1] + 0.005]
+            # self.current_spn = [self.current_spn[0] + 0.005, self.current_spn[1] + 0.005]
+            self.current_zoom -= 1
         elif event.key() == Qt.Key_PageDown:
-            self.current_spn = [self.current_spn[0] - 0.005, self.current_spn[1] - 0.005]
+            # self.current_spn = [self.current_spn[0] - 0.005, self.current_spn[1] - 0.005]
+            self.current_zoom += 1
         elif event.key() == Qt.Key_Up:
             self.current_coords[1] += 0.001
         elif event.key() == Qt.Key_Down:
@@ -116,6 +116,7 @@ class MainWindow(QMainWindow):
             placemark_ll = ",".join([str(element) for element in self.placemark_coords])
 
             toponym = get_object_by_address(placemark_ll)
+
             address = toponym['metaDataProperty']['GeocoderMetaData']['text']
 
             closest_org = find_closest_organization(address, placemark_ll)
