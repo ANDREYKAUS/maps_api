@@ -25,6 +25,7 @@ class MainWindow(QMainWindow):
         self.current_coords = [0, 0]
         self.current_style = "map"
         self.placemark_coords = None
+        self.is_showing_index = False
 
         self.init_ui()
         self.show_location((self.initial_location, False))
@@ -36,6 +37,7 @@ class MainWindow(QMainWindow):
         self.style_combobox.activated[str].connect(self.handle_style_change)
         self.reset_button.clicked.connect(self.reset_mode)
         self.end_button.clicked.connect(self.new_main_address)
+        self.index_checkbox.stateChanged.connect(self.handle_checkbox)
 
     def show_location(self, location=None):
         if location is not None:
@@ -77,13 +79,20 @@ class MainWindow(QMainWindow):
         
         self.show_location((search_location, True))
 
+    def handle_checkbox(self, state):
+        self.is_showing_index = bool(state)
+
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
             # self.current_spn = [self.current_spn[0] + 0.005, self.current_spn[1] + 0.005]
             self.current_zoom -= 1
+            if self.current_zoom == -1:
+                self.current_zoom = 0
         elif event.key() == Qt.Key_PageDown:
             # self.current_spn = [self.current_spn[0] - 0.005, self.current_spn[1] - 0.005]
             self.current_zoom += 1
+            if self.current_zoom == 17:
+                self.current_zoom = 16
         elif event.key() == Qt.Key_Up:
             self.current_coords[1] += 0.001
         elif event.key() == Qt.Key_Down:
@@ -117,16 +126,19 @@ class MainWindow(QMainWindow):
 
             toponym = get_object_by_address(placemark_ll)
 
-            address = toponym['metaDataProperty']['GeocoderMetaData']['text']
+            address = toponym['metaDataProperty']['GeocoderMetaData']['text'] + " "
+            index = toponym['metaDataProperty']['GeocoderMetaData']['Address']['postal_code']
 
             closest_org = find_closest_organization(address, placemark_ll)
 
+            if self.is_showing_index:
+                address += index + " "
+
             if closest_org:
                 org_name = closest_org['properties']['CompanyMetaData']['name']
-                self.address_label.setText(f"{address} (Ближайшая организация: {org_name})")
-            else:
-                self.address_label.setText(address)
+                address += f"(ближайшая организация: {org_name})"
 
+            self.address_label.setText(address)
             self.show_location()
 
 

@@ -261,14 +261,17 @@
        <string>Почтовый индекс</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="index_combobox">
+     <widget class="QCheckBox" name="index_checkbox">
       <property name="geometry">
        <rect>
         <x>440</x>
         <y>120</y>
         <width>251</width>
-        <height>31</height>
+        <height>20</height>
        </rect>
+      </property>
+      <property name="text">
+       <string>Показывать</string>
       </property>
      </widget>
     </widget>
