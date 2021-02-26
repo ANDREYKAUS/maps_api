@@ -103,6 +103,31 @@ class MainWindow(QMainWindow):
         self.current_style = MAP_STYLES[text]
         self.show_location()
 
+    def mousePressEvent(self, event):
+        if event.button() == Qt.RightButton:
+            position = event.pos()
+            x = event.x() - 80
+            y = event.y() - 80
+
+            if x > 650 or y > 450:
+                return
+            
+            self.placemark_coords = screen_to_geo(*self.current_coords, x, y, self.current_zoom)
+            placemark_ll = ",".join([str(element) for element in self.placemark_coords])
+
+            toponym = get_object_by_address(placemark_ll)
+            address = toponym['metaDataProperty']['GeocoderMetaData']['text']
+
+            closest_org = find_closest_organization(address, placemark_ll)
+
+            if closest_org:
+                org_name = closest_org['properties']['CompanyMetaData']['name']
+                self.address_label.setText(f"{address} (Ближайшая организация: {org_name})")
+            else:
+                self.address_label.setText(address)
+
+            self.show_location()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
