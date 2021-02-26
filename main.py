@@ -127,12 +127,14 @@ class MainWindow(QMainWindow):
             toponym = get_object_by_address(placemark_ll)
 
             address = toponym['metaDataProperty']['GeocoderMetaData']['text'] + " "
-            index = toponym['metaDataProperty']['GeocoderMetaData']['Address']['postal_code']
 
             closest_org = find_closest_organization(address, placemark_ll)
 
             if self.is_showing_index:
-                address += index + " "
+                address_object = toponym['metaDataProperty']['GeocoderMetaData']['Address']
+                if 'postal_code' in address_object:
+                    index = address_object['postal_code']
+                    address += index + " "
 
             if closest_org:
                 org_name = closest_org['properties']['CompanyMetaData']['name']
