@@ -1,6 +1,5 @@
 import sys
 import time
-from PIL.ImageQt import ImageQt
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5 import uic
 from PyQt5.QtGui import QPixmap, QImage
@@ -25,6 +24,7 @@ class MainWindow(QMainWindow):
         self.current_coords = [0, 0]
         self.current_style = "map"
         self.placemark_coords = None
+        self.placemark_index = None
         self.is_showing_index = False
 
         self.init_ui()
@@ -49,7 +49,7 @@ class MainWindow(QMainWindow):
                 return
             location_coordinates = list(get_coordinates_from_object(toponym))
             address = toponym['metaDataProperty']['GeocoderMetaData']['text']
-            index = toponym['metaDataProperty']['GeocoderMetaData']['Address'].get('postal_code', "")
+            self.placemark_index = toponym['metaDataProperty']['GeocoderMetaData']['Address'].get('postal_code', None)
             address_text = address
             if self.is_showing_index and index:
                 address_text += f" ({index})"
@@ -98,8 +98,11 @@ class MainWindow(QMainWindow):
 
     def handle_checkbox(self, state):
         self.is_showing_index = bool(state)
-        print(self.is_showing_index)
-        self.show_location()
+        current_text = self.address_label.text()
+        if self.placemark_index and f"({self.placemark_index})" not in current_text:
+            self.address_label.setText(f"{current_text} ({self.placemark_index})")
+        elif self.placemark_index and f"({self.placemark_index})" in current_text:
+            self.address_label.setText(current_text.replace(f" ({self.placemark_index})", ""))
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
