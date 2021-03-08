@@ -49,7 +49,11 @@ class MainWindow(QMainWindow):
                 return
             location_coordinates = list(get_coordinates_from_object(toponym))
             address = toponym['metaDataProperty']['GeocoderMetaData']['text']
-            self.address_label.setText(address)
+            index = toponym['metaDataProperty']['GeocoderMetaData']['Address'].get('postal_code', "")
+            address_text = address
+            if self.is_showing_index and index:
+                address_text += f" ({index})"
+            self.address_label.setText(address_text)
             self.current_coords = location_coordinates
             if is_placemark:
                 self.placemark_coords = location_coordinates.copy()
@@ -94,27 +98,29 @@ class MainWindow(QMainWindow):
 
     def handle_checkbox(self, state):
         self.is_showing_index = bool(state)
+        print(self.is_showing_index)
         self.show_location()
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
             # self.current_spn = [self.current_spn[0] + 0.005, self.current_spn[1] + 0.005]
             self.current_zoom -= 1
-            if self.current_zoom == -1:
-                self.current_zoom = 0
+            if self.current_zoom == 3:
+                self.current_zoom = 4
+            print(self.current_zoom)
         elif event.key() == Qt.Key_PageDown:
             # self.current_spn = [self.current_spn[0] - 0.005, self.current_spn[1] - 0.005]
             self.current_zoom += 1
             if self.current_zoom == 17:
                 self.current_zoom = 16
         elif event.key() == Qt.Key_Up:
-            self.current_coords[1] += 0.001
+            self.current_coords[1] += 0.001 * 2 ** (17 - self.current_zoom)
         elif event.key() == Qt.Key_Down:
-            self.current_coords[1] -= 0.001
+            self.current_coords[1] -= 0.001 * 2 ** (17 - self.current_zoom)
         elif event.key() == Qt.Key_Left:
-            self.current_coords[0] -= 0.001
+            self.current_coords[0] -= 0.001 * 2 ** (17 - self.current_zoom)
         elif event.key() == Qt.Key_Right:
-            self.current_coords[0] += 0.001
+            self.current_coords[0] += 0.001 * 2 ** (17 - self.current_zoom)
         elif event.key() == Qt.Key_Escape:
             self.close()
 
@@ -127,7 +133,7 @@ class MainWindow(QMainWindow):
         self.show_location()
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.RightButton:
+        if event.button() == Qt.LeftButton:
             position = event.pos()
             x = event.x() - 80
             y = event.y() - 80
